@@ -1,0 +1,112 @@
+{
+  "name": "quick-tsr",
+  "version": "0.0.0",
+  "description": "Read timeline from file, use TSR, play stuff",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/module/index.js",
+  "browser": "dist/browser/index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nytamin/quickTSR"
+  },
+  "author": {
+    "name": "Johan Nyman",
+    "email": "johan@superfly.tv",
+    "url": "http://superfly.tv"
+  },
+  "contributors": [],
+  "scripts": {
+    "info": "npm-scripts-info",
+    "build": "trash dist && yarn build:main",
+    "buildstart": "yarn build && yarn start",
+    "buildinspect": "yarn build && yarn inspect",
+    "build:main": "tsc -p tsconfig.json",
+    "lint": "tslint --project tsconfig.jest.json --config tslint.json",
+    "unit": "jest",
+    "test": "yarn lint && yarn unit",
+    "test:integration": "yarn lint && jest --config=jest-integration.config.js",
+    "watch": "jest --watch",
+    "cov": "jest; opn coverage/lcov-report/index.html",
+    "cov-open": "opn coverage/lcov-report/index.html",
+    "send-coverage": "jest && codecov",
+    "docs": "yarn docs:html && opn docs/index.html",
+    "docs:html": "typedoc src/index.ts --excludePrivate --mode file --theme minimal --out docs",
+    "docs:json": "typedoc --mode file --json docs/typedoc.json src/index.ts",
+    "docs:publish": "yarn docs:html && gh-pages -d docs",
+    "changelog": "standard-version",
+    "release": "yarn reset && yarn test && yarn docs:publish && yarn changelog",
+    "reset": "git clean -dfx && git reset --hard && yarn",
+    "ci": "yarn test",
+    "inspect": "node --inspect dist/index.js",
+    "start": "ts-node src/index.ts",
+    "unlinkall": "yarn unlink tv-automation-server-core-integration timeline-state-resolver && yarn --check-files",
+    "validate:dependencies": "yarn audit && yarn license-validate",
+    "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-2-Clause BSD-3-Clause ISC Apache Unlicense WTFPL --allow-packages cycle",
+    "prerelease": "standard-version --prerelease"
+  },
+  "scripts-info": {
+    "info": "Display information about the scripts",
+    "build": "(Trash and re)build the library",
+    "lint": "Lint all typescript source files",
+    "unit": "Build the library and run unit tests",
+    "test": "Lint, build, and test the library",
+    "watch": "Watch source files, rebuild library on changes, rerun relevant tests",
+    "cov": "Run tests, generate the HTML coverage report, and open it in a browser",
+    "docs": "Generate HTML API documentation and open it in a browser",
+    "docs:publish": "Generate HTML API documentation and push it to GitHub Pages",
+    "docs:json": "Generate API documentation in typedoc JSON format",
+    "changelog": "Bump package.json version, update CHANGELOG.md, tag a release",
+    "reset": "Delete all untracked files and reset the repo to the last commit",
+    "release": "Clean, build, test, publish docs, and prepare release (a one-step publish process)"
+  },
+  "engines": {
+    "node": ">=4.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.1.0",
+    "@types/node": "^8.0.4",
+    "@types/underscore": "^1.8.8",
+    "@types/winston": "^2.3.9",
+    "codecov": "3.3.0",
+    "gh-pages": "^2.0.1",
+    "jest": "^24.7.1",
+    "mkdirp": "^0.5.1",
+    "node-license-validator": "^1.3.0",
+    "npm-scripts-info": "^0.3.9",
+    "nyc": "^13.3.0",
+    "opn-cli": "^4.1.0",
+    "sleep-ms": "^2.0.1",
+    "standard-version": "^5.0.2",
+    "trash-cli": "^1.4.0",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.15.0",
+    "tslint-config-standard": "^8.0.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3333"
+  },
+  "resolutions": {
+    "typedoc/**/marked": "^0.6.2"
+  },
+  "keywords": [
+    "broadcast",
+    "socket",
+    "typescript",
+    "javascript",
+    "open",
+    "source",
+    "automation",
+    "ncs",
+    "nrcs",
+    "rundown",
+    "production"
+  ],
+  "dependencies": {
+    "chokidar": "^3.0.2",
+    "fast-clone": "^1.5.13",
+    "timeline-state-resolver": "^3.1.1",
+    "tslib": "^1.9.2",
+    "underscore": "^1.9.1"
+  }
+}
