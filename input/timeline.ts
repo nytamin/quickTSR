@@ -1,6 +1,5 @@
 import { DeviceType, TimelineContentTypeCasparCg } from 'timeline-state-resolver'
 import { TSRInput } from '../src'
-// import { Transition, TransitionObject } from 'casparcg-state/dist/lib/transitionObject'
 import { Transition } from 'timeline-state-resolver/dist/types/src/casparcg'
 
 export const input: TSRInput = {

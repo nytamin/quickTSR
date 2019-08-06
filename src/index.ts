@@ -2,6 +2,7 @@ import * as chokidar from 'chokidar'
 
 import * as fs from 'fs'
 import * as _ from 'underscore'
+import * as path from 'path'
 import { DeviceOptions, Mappings, TSRTimeline } from 'timeline-state-resolver'
 import { TSRHandler } from './tsrHandler'
 const clone = require('fast-clone')
@@ -42,22 +43,22 @@ function reloadInput () {
 		settings: {},
 		timeline: []
 	}
-	_.each(fs.readdirSync('input/'), file => {
+	// _.each(fs.readdirSync('input/'), file => {
+	_.each(getAllFilesInDirectory('input/'), filePath => {
 
-		if (file[0] === '_') {
-			// ignore files that begin with "_"
+		const requirePath = '../' + filePath.replace(/\\/g, '/')
+
+		if (requirePath.match(/[\/\\]_/)) {
+			// ignore and folders files that begin with "_"
 			return
 		}
-		const path = '../input/' + file
-		if (path.match(/\.ts$/)) {
+		if (filePath.match(/\.ts$/)) {
 
-			delete require.cache[require.resolve(path)]
+			delete require.cache[require.resolve(requirePath)]
 
-			const fileContents = require(path)
+			const fileContents = require(requirePath)
 
 			const fileInput = fileContents.input || {}
-
-			// console.log(path, fileInput)
 
 			_.each(fileInput.devices, (device: any, deviceId) => {
 				newInput.devices[deviceId] = device
@@ -80,6 +81,8 @@ function reloadInput () {
 
 		if (!_.isEqual(newInput.settings, currentInput.settings)) {
 
+			console.log('')
+			console.log('')
 			console.log('************************ Settings changed ******************')
 			currentInput.settings = clone(newInput.settings)
 			currentInput.devices = {}
@@ -93,6 +96,8 @@ function reloadInput () {
 		}
 
 		if (!_.isEqual(newInput.devices, currentInput.devices)) {
+			console.log('')
+			console.log('')
 			console.log('************************ Devices changed ******************')
 			currentInput.devices = clone(newInput.devices)
 			currentInput.mappings = {}
@@ -105,6 +110,8 @@ function reloadInput () {
 			!_.isEqual(newInput.mappings, currentInput.mappings) ||
 			!_.isEqual(newInput.timeline, currentInput.timeline)
 		) {
+			console.log('')
+			console.log('')
 			console.log('************************ Timeline / Mappings changed ******************')
 			currentInput.mappings = clone(newInput.mappings)
 			currentInput.timeline = clone(newInput.timeline)
@@ -114,6 +121,23 @@ function reloadInput () {
 	})
 	.catch(console.error)
 }
+function getAllFilesInDirectory (dir: string): string[] {
+	const files = fs.readdirSync(dir)
+
+	let filelist: string[] = []
+	files.forEach(file => {
+
+		if (fs.statSync(path.join(dir, file)).isDirectory()) {
+			getAllFilesInDirectory(path.join(dir, file)).forEach(innerFile => {
+				filelist.push(innerFile)
+			})
+		} else {
+			filelist.push(path.join(dir, file))
+		}
+	})
+	return filelist
+}
+
 export type Optional<T> = {
 	[K in keyof T]?: T[K]
 }
