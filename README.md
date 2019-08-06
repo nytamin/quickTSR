@@ -1,25 +1,18 @@
 # Quick-TSR
-An application for simple usage of TSR, https://github.com/nrkno/tv-automation-state-timeline-resolver
+An application for quick and easy usage of TSR (https://github.com/nrkno/tv-automation-state-timeline-resolver).
+
+## Requirements
+* Install [yarn](https://yarnpkg.com/en/docs/install)
+* Install ts-node:
+  * `yarn global add ts-node`
+  * `yarn global add typescript`
+  
 
 ## Usage
-```
-yarn start
-```
+* Clone the repo
+* `yarn` to install
+* `yarn start` to start the application
 
-* The contents in the folder `/input` will be included and played out.
-* The files that begin with "_" (underscore) will be ignored
 
-## Installation for dev
-
-* yarn
-* yarn build
-* yarn test
-
-### Dev dependencies:
-
-* yarn
-	https://yarnpkg.com
-
-* jest
-	yarn global add jest
-
+* The application will monitor the contents in the folder `/input` and play them out.
+* Files and folders that begin with "_" (underscore) will be ignored
