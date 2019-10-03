@@ -1,13 +1,14 @@
-import { TSRInput } from '../src'
+import { TSRInput } from '..'
 import { DeviceType } from 'timeline-state-resolver'
 
 export const input: TSRInput = {
 	devices: {
-		'caspar0': {
-			type: DeviceType.CASPARCG,
+		'sisyfos0': {
+			type: DeviceType.SISYFOS,
 			options: {
 				host: '127.0.0.1',
-				port: 5250
+				port: 5255
+
 			}
 		}
 	}

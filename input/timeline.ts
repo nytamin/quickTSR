@@ -1,69 +1,199 @@
-import { DeviceType, TimelineContentTypeCasparCg } from 'timeline-state-resolver'
-import { TSRInput } from '../src'
-import { Transition } from 'timeline-state-resolver/dist/types/src/casparcg'
+import { DeviceType, TimelineContentTypeSisyfos } from 'timeline-state-resolver'
+import { TSRInput } from '..'
 
 export const input: TSRInput = {
 	timeline: [
 		{
-			id: 'video0',
+			id: 'baseline1',
 			enable: {
-				start: Date.now(),
-				duration: 20 * 1000
+				while: '1'
 			},
-			layer: 'casparLayer0',
+			layer: 'fader1',
 			content: {
-				deviceType: DeviceType.CASPARCG,
-				type: TimelineContentTypeCasparCg.MEDIA,
-				file: 'amb',
-				mixer: {
-					rotation: 0,
-					anchor: {
-						x: 0.5,
-						y: 0.5
-					},
-					fill: {
-						x: 0.5,
-						y: 0.5,
-						xScale: 1,
-						yScale: 1
-					}
-				}
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 0
 			},
-			keyframes: [
-				{
-					id: 'kf0',
-					enable: {
-						start: 1000,
-						duration: 5000
-					},
-					content: {
-						mixer: {
-							rotation: 45,
-							changeTransition: {
-								type: Transition.MIX,
-								duration: 5000,
-								easing: 'cubic'
-							}
-						}
-					}
-				},
-				{
-					id: 'kf1',
-					enable: {
-						start: 1
-					},
-					content: {
-						mixer: {
-							changeTransition: {
-								type: Transition.MIX,
-								duration: 5000,
-								easing: 'cubic'
-							}
-						}
-					}
-				}
-			]
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f1pgm',
+			enable: {
+				start: Date.now() + 1000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
 
-		}
+		},
+		{
+			id: 'f1vo',
+			enable: {
+				start: Date.now() + 2000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 2
+			},
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f1pst',
+			enable: {
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
+
+		},
+		{
+			id: 'baseline2',
+			enable: {
+				while: '1'
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 0
+			},
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f2pgm',
+			enable: {
+				start: Date.now() + 2000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
+
+		},
+		{
+			id: 'f2vo',
+			enable: {
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 2
+			},
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f2pst',
+			enable: {
+				start: Date.now() + 4000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
+
+		},
+		{
+			id: 'baseline3',
+			enable: {
+				while: '1'
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 0
+			},
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f3pgm',
+			enable: {
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
+
+		},
+		{
+			id: 'f3vo',
+			enable: {
+				start: Date.now() + 4000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 2
+			},
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f3pst',
+			enable: {
+				start: Date.now() + 5000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
+
+		},
 	]
 }
