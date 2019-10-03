@@ -1,13 +1,11 @@
 import { DeviceType } from 'timeline-state-resolver'
-import { TSRInput } from '../src'
 
-export const input: TSRInput = {
+export const input = {
 	mappings: {
-		'casparLayer0': {
-			device: DeviceType.CASPARCG,
-			deviceId: 'caspar0',
-			channel: 1,
-			layer: 10
+		'fader1': {
+			device: DeviceType.SISYFOS,
+			deviceId: 'sisyfos0',
+			channel: 1
 		}
 	}
 }

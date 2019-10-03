@@ -207,6 +207,9 @@ export class TSRHandler {
 		this.tsr.addDevice(deviceId, options)
 		.then(async (device: DeviceContainer) => {
 			// set up device status
+			device.device.on('connectionChanged', (v) => {
+				console.log('connectionchanged', v)
+			})
 
 			this._devices[deviceId] = device
 

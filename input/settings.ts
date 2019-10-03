@@ -1,4 +1,4 @@
-import { TSRInput } from '../src'
+import { TSRInput } from '..'
 
 export const input: TSRInput = {
 	settings: {

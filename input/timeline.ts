@@ -1,68 +1,66 @@
-import { DeviceType, TimelineContentTypeCasparCg } from 'timeline-state-resolver'
-import { TSRInput } from '../src'
-import { Transition } from 'timeline-state-resolver/dist/types/src/casparcg'
+import { DeviceType, TimelineContentTypeSisyfos } from 'timeline-state-resolver'
+import { TSRInput } from '..'
 
 export const input: TSRInput = {
 	timeline: [
 		{
-			id: 'video0',
+			id: 'baseline',
 			enable: {
-				start: Date.now(),
-				duration: 20 * 1000
+				while: '1'
 			},
-			layer: 'casparLayer0',
+			layer: 'fader1',
 			content: {
-				deviceType: DeviceType.CASPARCG,
-				type: TimelineContentTypeCasparCg.MEDIA,
-				file: 'amb',
-				mixer: {
-					rotation: 0,
-					anchor: {
-						x: 0.5,
-						y: 0.5
-					},
-					fill: {
-						x: 0.5,
-						y: 0.5,
-						xScale: 1,
-						yScale: 1
-					}
-				}
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPst: 0
 			},
-			keyframes: [
-				{
-					id: 'kf0',
-					enable: {
-						start: 1000,
-						duration: 5000
-					},
-					content: {
-						mixer: {
-							rotation: 45,
-							changeTransition: {
-								type: Transition.MIX,
-								duration: 5000,
-								easing: 'cubic'
-							}
-						}
-					}
-				},
-				{
-					id: 'kf1',
-					enable: {
-						start: 1
-					},
-					content: {
-						mixer: {
-							changeTransition: {
-								type: Transition.MIX,
-								duration: 5000,
-								easing: 'cubic'
-							}
-						}
-					}
-				}
-			]
+			priority: 0
+
+		},
+		{
+			id: 'pgm',
+			enable: {
+				start: Date.now() + 2000,
+				duration: 3000
+				// repeating: 2000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPst: 1
+			},
+			priority: 1
+
+		},
+		{
+			id: 'pgm1',
+			enable: {
+				start: Date.now() + 6000,
+				duration: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPst: 0
+			},
+			priority: 1
+
+		},
+		{
+			id: 'pgm2',
+			enable: {
+				start: Date.now() + 9000,
+				duration: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPst: 2
+			},
+			priority: 1
 
 		}
 	]
