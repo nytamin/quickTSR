@@ -4,7 +4,7 @@ import { TSRInput } from '..'
 export const input: TSRInput = {
 	timeline: [
 		{
-			id: 'baseline',
+			id: 'baseline1',
 			enable: {
 				while: '1'
 			},
@@ -12,56 +12,188 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPst: 0
+				isPgm: 0
 			},
-			priority: 0
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f1pgm',
+			enable: {
+				start: Date.now() + 1000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
 
 		},
 		{
-			id: 'pgm',
+			id: 'f1vo',
 			enable: {
 				start: Date.now() + 2000,
-				duration: 3000
-				// repeating: 2000
+				duration: 1000,
+				repeating: 3000
 			},
 			layer: 'fader1',
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPst: 1
+				isPgm: 2
 			},
-			priority: 1
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f1pst',
+			enable: {
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader1',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
 
 		},
 		{
-			id: 'pgm1',
+			id: 'baseline2',
 			enable: {
-				start: Date.now() + 6000,
-				duration: 3000
+				while: '1'
 			},
-			layer: 'fader1',
+			layer: 'fader2',
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPst: 0
+				isPgm: 0
 			},
-			priority: 1
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f2pgm',
+			enable: {
+				start: Date.now() + 2000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
 
 		},
 		{
-			id: 'pgm2',
+			id: 'f2vo',
 			enable: {
-				start: Date.now() + 9000,
-				duration: 3000
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
 			},
-			layer: 'fader1',
+			layer: 'fader2',
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPst: 2
+				isPgm: 2
 			},
-			priority: 1
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f2pst',
+			enable: {
+				start: Date.now() + 4000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader2',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
 
-		}
+		},
+		{
+			id: 'baseline3',
+			enable: {
+				while: '1'
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 0
+			},
+			priority: 0,
+			isLookahead: true
+		},
+		{
+			id: 'f3pgm',
+			enable: {
+				start: Date.now() + 3000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: false
+
+		},
+		{
+			id: 'f3vo',
+			enable: {
+				start: Date.now() + 4000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 2
+			},
+			priority: 1,
+			isLookahead: false
+		},
+		{
+			id: 'f3pst',
+			enable: {
+				start: Date.now() + 5000,
+				duration: 1000,
+				repeating: 3000
+			},
+			layer: 'fader3',
+			content: {
+				deviceType: DeviceType.SISYFOS,
+				type: TimelineContentTypeSisyfos.SISYFOS,
+				isPgm: 1
+			},
+			priority: 1,
+			isLookahead: true
+
+		},
 	]
 }
