@@ -3,7 +3,7 @@ import * as chokidar from 'chokidar'
 import * as fs from 'fs'
 import * as _ from 'underscore'
 import * as path from 'path'
-import { DeviceOptions, Mappings, TSRTimeline } from 'timeline-state-resolver'
+import { Mappings, TSRTimeline, DeviceOptionsAny } from 'timeline-state-resolver'
 import { TSRHandler } from './tsrHandler'
 const clone = require('fast-clone')
 // import { TSRHandler } from './tsrHandler'
@@ -150,7 +150,7 @@ export type TSRInput = Optional<Input>
 export interface Input {
 	settings: TSRSettings,
 	devices: {
-		[deviceId: string]: DeviceOptions
+		[deviceId: string]: DeviceOptionsAny
 	},
 	mappings: Mappings,
 	timeline: TSRTimeline

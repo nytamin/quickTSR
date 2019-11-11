@@ -3,7 +3,7 @@ import {
 	ConductorOptions,
 	Device,
 	TimelineTriggerTimeResult,
-	DeviceOptions,
+	DeviceOptionsAny,
 	Mappings,
 	DeviceContainer,
 	Timeline as TimelineTypes,
@@ -155,9 +155,9 @@ export class TSRHandler {
 		await this.tsr.setMapping(mappings)
 		this.tsr.timeline = tl
 	}
-	public setDevices (devices: {[deviceId: string]: DeviceOptions}) {
+	public setDevices (devices: {[deviceId: string]: DeviceOptionsAny}) {
 
-		_.each(devices, (deviceOptions: DeviceOptions, deviceId: string) => {
+		_.each(devices, (deviceOptions: DeviceOptionsAny, deviceId: string) => {
 
 			let oldDevice: DeviceContainer = this.tsr.getDevice(deviceId)
 
@@ -196,7 +196,7 @@ export class TSRHandler {
 			}
 		})
 	}
-	private _addDevice (deviceId: string, options: DeviceOptions): void {
+	private _addDevice (deviceId: string, options: DeviceOptionsAny): void {
 		// console.log('Adding device ' + deviceId)
 
 		// @ts-ignore
@@ -207,7 +207,7 @@ export class TSRHandler {
 		this.tsr.addDevice(deviceId, options)
 		.then(async (device: DeviceContainer) => {
 			// set up device status
-			device.device.on('connectionChanged', (v) => {
+			await device.device.on('connectionChanged', (v) => {
 				console.log('connectionchanged', v)
 			})
 
