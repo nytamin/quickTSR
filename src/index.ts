@@ -56,23 +56,27 @@ function reloadInput () {
 
 			delete require.cache[require.resolve(requirePath)]
 
-			const fileContents = require(requirePath)
+			try {
+				const fileContents = require(requirePath)
 
-			const fileInput = fileContents.input || {}
+				const fileInput = fileContents.input || {}
 
-			_.each(fileInput.devices, (device: any, deviceId) => {
-				newInput.devices[deviceId] = device
-			})
-			_.each(fileInput.mappings, (mapping: any, mappingId) => {
-				newInput.mappings[mappingId] = mapping
-			})
-			_.each(fileInput.settings, (setting: any, settingId) => {
-				newInput.settings[settingId] = setting
-			})
+				_.each(fileInput.devices, (device: any, deviceId) => {
+					newInput.devices[deviceId] = device
+				})
+				_.each(fileInput.mappings, (mapping: any, mappingId) => {
+					newInput.mappings[mappingId] = mapping
+				})
+				_.each(fileInput.settings, (setting: any, settingId) => {
+					newInput.settings[settingId] = setting
+				})
 
-			_.each(fileInput.timeline, (obj: any) => {
-				newInput.timeline.push(obj)
-			})
+				_.each(fileInput.timeline, (obj: any) => {
+					newInput.timeline.push(obj)
+				})
+			} catch (e) {
+				console.error(`Failed to load file: ${requirePath}`, e)
+			}
 		}
 	})
 	// react to changes:
