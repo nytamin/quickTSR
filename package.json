@@ -68,6 +68,6 @@
     "fast-clone": "^1.5.13",
     "timeline-state-resolver": "^3.10.0",
     "tslib": "^1.10.0",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   }
 }
