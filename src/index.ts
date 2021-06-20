@@ -178,11 +178,11 @@ const compareState = () => {
 	})
 	.then((state1) => {
 		currentState1 = state1
+		console.log('Comparison of state :', currentState0 === currentState1)
 	})
 	.catch((error) => {
 		console.log('ERROR GETTING STATE :', error)
 	})
-	console.log('Comparison of state :', currentState0 === currentState1)
 }
 // ------------
 reloadInput();
@@ -192,5 +192,5 @@ console.log("Listening to changes in /input...");
 
 setInterval(() => {
 	compareState()
-}, 5000);
+}, 3000);
 
