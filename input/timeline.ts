@@ -1,5 +1,5 @@
 import { DeviceType, TimelineContentTypeSisyfos } from 'timeline-state-resolver'
-import { TSRInput } from '..'
+import { TSRInput } from '../src/index'
 
 export const input: TSRInput = {
 	timeline: [
@@ -12,7 +12,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 0
+				isPgm: false
 			},
 			priority: 0,
 			isLookahead: true
@@ -28,7 +28,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -45,7 +45,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 2
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -61,7 +61,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: true
@@ -76,7 +76,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 0
+				isPgm: false
 			},
 			priority: 0,
 			isLookahead: true
@@ -92,7 +92,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -109,7 +109,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 2
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -125,7 +125,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: true
@@ -140,7 +140,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 0
+				isPgm: false
 			},
 			priority: 0,
 			isLookahead: true
@@ -156,7 +156,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -173,7 +173,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 2
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: false
@@ -189,7 +189,7 @@ export const input: TSRInput = {
 			content: {
 				deviceType: DeviceType.SISYFOS,
 				type: TimelineContentTypeSisyfos.SISYFOS,
-				isPgm: 1
+				isPgm: true
 			},
 			priority: 1,
 			isLookahead: true
