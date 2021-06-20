@@ -5,6 +5,7 @@ import * as _ from 'underscore'
 import * as path from 'path'
 import { DeviceOptions, Mappings, TSRTimeline } from 'timeline-state-resolver'
 import { TSRHandler } from './tsrHandler'
+import { getSisyfosState } from './stateFromOsc'
 const clone = require('fast-clone')
 // import { TSRHandler } from './tsrHandler'
 
@@ -44,7 +45,7 @@ function reloadInput () {
 		timeline: []
 	}
 	// _.each(fs.readdirSync('input/'), file => {
-	_.each(getAllFilesInDirectory('input/'), filePath => {
+	_.each(getAllFilesInDirectory('src/input/'), filePath => {
 
 		const requirePath = '../' + filePath.replace(/\\/g, '/')
 
@@ -160,3 +161,4 @@ export interface TSRSettings {
 // ------------
 reloadInput()
 console.log('Listening to changes in /input...')
+getSisyfosState('127.0.0.1', 5255)

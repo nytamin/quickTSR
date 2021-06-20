@@ -1,4 +1,4 @@
-import { TSRInput } from "../src/index";
+import { TSRInput } from "../index";
 import { DeviceType } from "timeline-state-resolver";
 
 export const input: TSRInput = {
@@ -6,7 +6,7 @@ export const input: TSRInput = {
 		sisyfos0: {
 			type: DeviceType.SISYFOS,
 			options: {
-				host: "127.0.0.1",
+				host: "192.168.0.9",
 				port: 5255,
 			},
 		},

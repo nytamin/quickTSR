@@ -1,5 +1,5 @@
 import { DeviceType, TimelineContentTypeSisyfos } from 'timeline-state-resolver'
-import { TSRInput } from '../src/index'
+import { TSRInput } from '../index'
 
 export const input: TSRInput = {
 	timeline: [
