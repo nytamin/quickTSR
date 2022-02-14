@@ -32,7 +32,7 @@ export interface TSRConfig {
 // }
 export interface TSRDevice {
 	// coreConnection: CoreConnection
-	device: Device
+	device: Device<any>
 }
 
 // ----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ export class TSRHandler {
 	// private _timeline: TSRTimeline
 	// private _mappings: Mappings
 
-	private _devices: {[deviceId: string]: DeviceContainer} = {}
+	private _devices: {[deviceId: string]: DeviceContainer<any>} = {}
 
 	constructor () {
 		// nothing
@@ -152,14 +152,13 @@ export class TSRHandler {
 		// this._timeline = tl
 		// this._mappings = mappings
 
-		await this.tsr.setMapping(mappings)
-		this.tsr.timeline = tl
+		this.tsr.setTimelineAndMappings(tl, mappings)
 	}
 	public setDevices (devices: {[deviceId: string]: DeviceOptionsAny}) {
 
 		_.each(devices, (deviceOptions: DeviceOptionsAny, deviceId: string) => {
 
-			let oldDevice: DeviceContainer = this.tsr.getDevice(deviceId)
+			let oldDevice = this.tsr.getDevice(deviceId)
 
 			if (!oldDevice) {
 				if (deviceOptions.options) {
@@ -188,7 +187,7 @@ export class TSRHandler {
 			}
 		})
 
-		_.each(this.tsr.getDevices(), async (oldDevice: DeviceContainer) => {
+		_.each(this.tsr.getDevices(), async (oldDevice: DeviceContainer<any>) => {
 			let deviceId = oldDevice.deviceId
 			if (!devices[deviceId]) {
 				console.log('Un-initializing device: ' + deviceId)
@@ -205,7 +204,7 @@ export class TSRHandler {
 		if (!options.limitSlowFulfilledCommand)	options.limitSlowFulfilledCommand = 100
 
 		this.tsr.addDevice(deviceId, options)
-		.then(async (device: DeviceContainer) => {
+		.then(async (device: DeviceContainer<any>) => {
 			// set up device status
 			await device.device.on('connectionChanged', (v) => {
 				console.log('connectionchanged', v)
