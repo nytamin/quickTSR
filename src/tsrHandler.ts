@@ -8,7 +8,7 @@ import {
 	DeviceContainer,
 	Timeline as TimelineTypes,
 	TSRTimeline,
-	TSRTimelineObjBase
+	TSRTimelineObjBase,
 } from 'timeline-state-resolver'
 
 // import * as crypto from 'crypto'
@@ -19,8 +19,7 @@ import { TSRSettings } from './index'
 // import { TimelineObjectCoreExt } from 'tv-automation-sofie-blueprints-integration'
 // import { LoggerInstance } from './index'
 
-export interface TSRConfig {
-}
+export type TSRConfig = Record<string, never>
 // export interface TSRSettings { // Runtime settings from Core
 // 	devices: {
 // 		[deviceId: string]: DeviceOptions
@@ -72,7 +71,7 @@ export enum TimelineObjType {
 	/** Objects controlling manual playback */
 	MANUAL = 'manual',
 	/** "Magic object", used to calculate a hash of the timeline */
-	STAT = 'stat'
+	STAT = 'stat',
 }
 // ----------------------------------------------------------------------------
 
@@ -83,21 +82,20 @@ export interface TimelineContentObjectTmp extends TSRTimelineObjBase {
  * Represents a connection between Gateway and TSR
  */
 export class TSRHandler {
-	tsr: Conductor
+	private tsr!: Conductor
 
 	private _multiThreaded: boolean | null = null
 
 	// private _timeline: TSRTimeline
 	// private _mappings: Mappings
 
-	private _devices: {[deviceId: string]: DeviceContainer<any>} = {}
+	private _devices: { [deviceId: string]: DeviceContainer<any> } = {}
 
-	constructor () {
+	constructor() {
 		// nothing
 	}
 
-	public async init (tsrSettings: TSRSettings): Promise<any> {
-
+	public async init(tsrSettings: TSRSettings): Promise<any> {
 		// this._config = config
 
 		console.log('TSRHandler init')
@@ -105,11 +103,11 @@ export class TSRHandler {
 		// let settings: TSRSettings = peripheralDevice.settings || {}
 
 		// console.log('Devices', settings.devices)
-		let c: ConductorOptions = {
+		const c: ConductorOptions = {
 			getCurrentTime: Date.now,
 			initializeAsClear: tsrSettings.initializeAsClear,
 			multiThreadedResolver: tsrSettings.multiThreadedResolver,
-			proActiveResolve: true
+			proActiveResolve: true,
 		}
 		this.tsr = new Conductor(c)
 
@@ -123,12 +121,11 @@ export class TSRHandler {
 			console.log('Warning: TSR', msg, ...args)
 		})
 		// this.tsr.on('debug', (...args: any[]) => {
-			// console.log(...args)
+		// console.log(...args)
 		// })
 
 		this.tsr.on('setTimelineTriggerTime', (_r: TimelineTriggerTimeResult) => {
 			// TODO
-
 		})
 		this.tsr.on('timelineCallback', (_time, _objId, _callbackName, _data) => {
 			// todo ?
@@ -142,23 +139,20 @@ export class TSRHandler {
 		// this._triggerupdateDevices()
 		// this.onSettingsChanged()
 		// this.logger.debug('tsr init done')
-
 	}
-	destroy (): Promise<void> {
+	async destroy(): Promise<void> {
 		if (this.tsr) return this.tsr.destroy()
 		else return Promise.resolve()
 	}
-	async setTimelineAndMappings (tl: TSRTimeline, mappings: Mappings) {
+	setTimelineAndMappings(tl: TSRTimeline, mappings: Mappings): void {
 		// this._timeline = tl
 		// this._mappings = mappings
 
 		this.tsr.setTimelineAndMappings(tl, mappings)
 	}
-	public setDevices (devices: {[deviceId: string]: DeviceOptionsAny}) {
-
+	public setDevices(devices: { [deviceId: string]: DeviceOptionsAny }): void {
 		_.each(devices, (deviceOptions: DeviceOptionsAny, deviceId: string) => {
-
-			let oldDevice = this.tsr.getDevice(deviceId)
+			const oldDevice = this.tsr.getDevice(deviceId)
 
 			if (!oldDevice) {
 				if (deviceOptions.options) {
@@ -187,50 +181,48 @@ export class TSRHandler {
 			}
 		})
 
-		_.each(this.tsr.getDevices(), async (oldDevice: DeviceContainer<any>) => {
-			let deviceId = oldDevice.deviceId
+		_.each(this.tsr.getDevices(), (oldDevice: DeviceContainer<any>) => {
+			const deviceId = oldDevice.deviceId
 			if (!devices[deviceId]) {
 				console.log('Un-initializing device: ' + deviceId)
 				this._removeDevice(deviceId)
 			}
 		})
 	}
-	private _addDevice (deviceId: string, options: DeviceOptionsAny): void {
+	private _addDevice(deviceId: string, options: DeviceOptionsAny): void {
 		// console.log('Adding device ' + deviceId)
 
-		// @ts-ignore
-		if (!options.limitSlowSentCommand)		options.limitSlowSentCommand = 40
-		// @ts-ignore
-		if (!options.limitSlowFulfilledCommand)	options.limitSlowFulfilledCommand = 100
+		if (!options.limitSlowSentCommand) options.limitSlowSentCommand = 40
+		if (!options.limitSlowFulfilledCommand) options.limitSlowFulfilledCommand = 100
 
-		this.tsr.addDevice(deviceId, options)
-		.then(async (device: DeviceContainer<any>) => {
-			// set up device status
-			await device.device.on('connectionChanged', (v) => {
-				console.log('connectionchanged', v)
+		this.tsr
+			.addDevice(deviceId, options)
+			.then(async (device: DeviceContainer<any>) => {
+				// set up device status
+				await device.device.on('connectionChanged', (v: any) => {
+					console.log('connectionchanged', v)
+				})
+
+				this._devices[deviceId] = device
+
+				await device.device.on('connectionChanged', (status: any) => {
+					console.log(`Device ${device.deviceId} status changed: ${status}`)
+				})
+				await device.device.on('slowCommand', (msg: any) => {
+					console.log(`Device ${device.deviceId} slow command: ${msg}`)
+				})
+				// also ask for the status now, and update:
+				// onConnectionChanged(await device.device.getStatus())
+
+				return Promise.resolve()
 			})
-
-			this._devices[deviceId] = device
-
-			await device.device.on('connectionChanged', (status) => {
-				console.log(`Device ${device.deviceId} status changed: ${status}`)
+			.catch((e) => {
+				console.error(`Error when adding device "${deviceId}"`, e)
 			})
-			await device.device.on('slowCommand', (msg) => {
-				console.log(`Device ${device.deviceId} slow command: ${msg}`)
-			})
-			// also ask for the status now, and update:
-			// onConnectionChanged(await device.device.getStatus())
-
-			return Promise.resolve()
-		})
-		.catch((e) => {
-			console.error(`Error when adding device "${deviceId}"`, e)
-		})
 	}
-	private _removeDevice (deviceId: string) {
+	private _removeDevice(deviceId: string) {
 		if (this._devices[deviceId]) {
-			this._devices[deviceId].device.terminate()
-			.catch(e => {
+			this._devices[deviceId].device.terminate().catch((e) => {
 				console.error('Error when removing device: ' + e)
 			})
 		}
