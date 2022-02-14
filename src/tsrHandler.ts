@@ -150,14 +150,16 @@ export class TSRHandler {
 
 		this.tsr.setTimelineAndMappings(tl, mappings)
 	}
-	public setDevices(devices: { [deviceId: string]: DeviceOptionsAny }): void {
+	public async setDevices(devices: { [deviceId: string]: DeviceOptionsAny }): Promise<void> {
+		const ps: Array<Promise<void>> = []
+
 		_.each(devices, (deviceOptions: DeviceOptionsAny, deviceId: string) => {
 			const oldDevice = this.tsr.getDevice(deviceId)
 
 			if (!oldDevice) {
 				if (deviceOptions.options) {
 					console.log('Initializing device: ' + deviceId)
-					this._addDevice(deviceId, deviceOptions)
+					ps.push(this._addDevice(deviceId, deviceOptions))
 				}
 			} else {
 				if (this._multiThreaded !== null && deviceOptions.isMultiThreaded === undefined) {
@@ -174,8 +176,7 @@ export class TSRHandler {
 
 					if (anyChanged) {
 						console.log('Re-initializing device: ' + deviceId)
-						this._removeDevice(deviceId)
-						this._addDevice(deviceId, deviceOptions)
+						ps.push(this._removeDevice(deviceId).then(async () => this._addDevice(deviceId, deviceOptions)))
 					}
 				}
 			}
@@ -185,46 +186,53 @@ export class TSRHandler {
 			const deviceId = oldDevice.deviceId
 			if (!devices[deviceId]) {
 				console.log('Un-initializing device: ' + deviceId)
-				this._removeDevice(deviceId)
+				ps.push(this._removeDevice(deviceId))
 			}
 		})
+
+		await Promise.all(ps)
 	}
-	private _addDevice(deviceId: string, options: DeviceOptionsAny): void {
+	private async _addDevice(deviceId: string, options: DeviceOptionsAny) {
 		// console.log('Adding device ' + deviceId)
 
 		if (!options.limitSlowSentCommand) options.limitSlowSentCommand = 40
 		if (!options.limitSlowFulfilledCommand) options.limitSlowFulfilledCommand = 100
 
-		this.tsr
-			.addDevice(deviceId, options)
-			.then(async (device: DeviceContainer<any>) => {
-				// set up device status
-				await device.device.on('connectionChanged', (v: any) => {
-					console.log('connectionchanged', v)
-				})
+		try {
+			const device = await this.tsr.addDevice(deviceId, options)
 
-				this._devices[deviceId] = device
-
-				await device.device.on('connectionChanged', (status: any) => {
-					console.log(`Device ${device.deviceId} status changed: ${status}`)
-				})
-				await device.device.on('slowCommand', (msg: any) => {
-					console.log(`Device ${device.deviceId} slow command: ${msg}`)
-				})
-				// also ask for the status now, and update:
-				// onConnectionChanged(await device.device.getStatus())
-
-				return Promise.resolve()
+			// set up device status
+			await device.device.on('connectionChanged', (v: any) => {
+				console.log('connectionchanged', v)
 			})
-			.catch((e) => {
-				console.error(`Error when adding device "${deviceId}"`, e)
+
+			this._devices[deviceId] = device
+
+			await device.device.on('connectionChanged', (status: any) => {
+				console.log(`Device ${device.deviceId} status changed: ${status}`)
 			})
+			await device.device.on('slowCommand', (msg: any) => {
+				console.log(`Device ${device.deviceId} slow command: ${msg}`)
+			})
+			// also ask for the status now, and update:
+			// onConnectionChanged(await device.device.getStatus())
+		} catch (e) {
+			console.error(`Error when adding device "${deviceId}"`, e)
+		}
 	}
-	private _removeDevice(deviceId: string) {
+	private async _removeDevice(deviceId: string) {
+		try {
+			await this.tsr.removeDevice(deviceId)
+		} catch (e) {
+			console.error('Error when removing tsr device: ' + e)
+		}
+
 		if (this._devices[deviceId]) {
-			this._devices[deviceId].device.terminate().catch((e) => {
+			try {
+				await this._devices[deviceId].device.terminate()
+			} catch (e) {
 				console.error('Error when removing device: ' + e)
-			})
+			}
 		}
 		delete this._devices[deviceId]
 	}

@@ -105,7 +105,7 @@ function reloadInput() {
 				currentInput.mappings = {}
 				currentInput.timeline = []
 
-				tsr.setDevices(newInput.devices)
+				await tsr.setDevices(newInput.devices)
 			}
 
 			if (
