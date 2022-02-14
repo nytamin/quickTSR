@@ -25,7 +25,7 @@
     "build:main": "tsc -p tsconfig.json",
     "lint": "tslint --project tsconfig.jest.json --config tslint.json",
     "inspect": "node --inspect dist/index.js",
-	"start": "ts-node src/index.ts",
+    "start": "ts-node src/index.ts",
     "unlinkall": "yarn unlink timeline-state-resolver && yarn --check-files",
     "validate:dependencies": "yarn audit && yarn license-validate",
     "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-2-Clause BSD-3-Clause ISC Apache Unlicense WTFPL --allow-packages cycle"
