@@ -18,30 +18,39 @@
   },
   "contributors": [],
   "scripts": {
+    "prepare": "husky install",
     "build": "rimraf dist && yarn build:main",
     "buildstart": "yarn build && yarn start",
     "buildinspect": "yarn build && yarn inspect",
-    "build:main": "tsc -p tsconfig.json",
-    "lint": "tslint --project tsconfig.jest.json --config tslint.json",
+    "build:main": "tsc -p tsconfig.build.json",
+    "lint:raw": "eslint --ext .ts --ext .js --ext .tsx --ext .jsx --ignore-pattern dist",
+    "lint": "yarn lint:raw .",
+    "lint-fix": "yarn lint --fix",
     "inspect": "node --inspect dist/index.js",
     "start": "ts-node src/index.ts",
     "unlinkall": "yarn unlink timeline-state-resolver && yarn --check-files",
     "validate:dependencies": "yarn audit && yarn license-validate",
-    "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-2-Clause BSD-3-Clause ISC Apache Unlicense WTFPL --allow-packages cycle"
+    "license-validate": "yarn sofie-licensecheck"
+  },
+  "prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
+  "lint-staged": {
+    "*.{css,json,md,scss}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "yarn lint:raw --fix"
+    ]
   },
   "engines": {
     "node": ">=12.20"
   },
   "devDependencies": {
+    "@sofie-automation/code-standard-preset": "^1.1.0",
     "@types/node": "^16",
     "@types/underscore": "^1.9.3",
-    "node-license-validator": "^1.3.0",
-    "npm-scripts-info": "^0.3.9",
     "rimraf": "^3.0.2",
     "ts-node": "^8.4.1",
-    "tslint": "^5.20.0",
-    "tslint-config-standard": "^9.0.0",
-    "typescript": "^3.6.3"
+    "typescript": "~4.5"
   },
   "keywords": [
     "broadcast",
@@ -60,7 +69,7 @@
     "chokidar": "^3.2.1",
     "fast-clone": "^1.5.13",
     "timeline-state-resolver": "^6.4.0-release39.1",
-    "tslib": "^1.10.0",
+    "tslib": "^2.3.1",
     "underscore": "^1.9.1"
   }
 }
