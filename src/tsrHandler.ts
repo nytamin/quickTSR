@@ -105,7 +105,6 @@ export class TSRHandler {
 		// console.log('Devices', settings.devices)
 		const c: ConductorOptions = {
 			getCurrentTime: Date.now,
-			initializeAsClear: tsrSettings.initializeAsClear,
 			multiThreadedResolver: tsrSettings.multiThreadedResolver,
 			proActiveResolve: true,
 		}
@@ -119,6 +118,9 @@ export class TSRHandler {
 		})
 		this.tsr.on('warning', (msg, ...args) => {
 			console.log('Warning: TSR', msg, ...args)
+		})
+		this.tsr.on('debug', (msg, ...args) => {
+			console.log('Debug: TSR', msg, ...args)
 		})
 		// this.tsr.on('debug', (...args: any[]) => {
 		// console.log(...args)

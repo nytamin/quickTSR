@@ -153,7 +153,6 @@ export interface Input {
 	timeline: TSRTimeline
 }
 export interface TSRSettings {
-	initializeAsClear?: boolean
 	multiThreading?: boolean
 	multiThreadedResolver?: boolean
 }
