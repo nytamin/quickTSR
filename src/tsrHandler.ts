@@ -9,6 +9,9 @@ import {
 	Timeline as TimelineTypes,
 	TSRTimeline,
 	TSRTimelineObjBase,
+	Datastore,
+	DeviceStatus,
+	SlowSentCommandInfo,
 } from 'timeline-state-resolver'
 
 // import * as crypto from 'crypto'
@@ -152,6 +155,9 @@ export class TSRHandler {
 
 		this.tsr.setTimelineAndMappings(tl, mappings)
 	}
+	setDatastore(store: Datastore): void {
+		this.tsr.setDatastore(store)
+	}
 	public async setDevices(devices: { [deviceId: string]: DeviceOptionsAny }): Promise<void> {
 		const ps: Array<Promise<void>> = []
 
@@ -203,19 +209,14 @@ export class TSRHandler {
 		try {
 			const device = await this.tsr.addDevice(deviceId, options)
 
-			// set up device status
-			await device.device.on('connectionChanged', (v: any) => {
-				console.log('connectionchanged', v)
-			})
-
 			this._devices[deviceId] = device
 
-			await device.device.on('connectionChanged', (status: any) => {
+			await device.device.on('connectionChanged', ((status: DeviceStatus) => {
 				console.log(`Device ${device.deviceId} status changed: ${status}`)
-			})
-			await device.device.on('slowCommand', (msg: any) => {
-				console.log(`Device ${device.deviceId} slow command: ${msg}`)
-			})
+			}) as () => void)
+			await device.device.on('slowCommand', ((_info: SlowSentCommandInfo) => {
+				// console.log(`Device ${device.deviceId} slow command: ${_info}`)
+			}) as () => void)
 			// also ask for the status now, and update:
 			// onConnectionChanged(await device.device.getStatus())
 		} catch (e) {

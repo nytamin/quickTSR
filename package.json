@@ -68,7 +68,7 @@
   "dependencies": {
     "chokidar": "^3.2.1",
     "fast-clone": "^1.5.13",
-    "timeline-state-resolver": "^6.4.0-release39.1",
+    "timeline-state-resolver": "7.5.0-nightly-release47-20221005-091131-abc856b2a.0",
     "tslib": "^2.3.1",
     "underscore": "^1.9.1"
   }

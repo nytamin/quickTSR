@@ -1,4 +1,4 @@
-import { DeviceType, Ease, TimelineContentTypeCasparCg, TimelineObjCCGMedia } from 'timeline-state-resolver'
+import { DeviceType, TimelineContentTypeCasparCg, TimelineObjCCGMedia } from 'timeline-state-resolver'
 import { TSRInput } from '../src'
 import { literal } from 'timeline-state-resolver/dist/devices/device'
 
@@ -24,11 +24,25 @@ export const input: TSRInput = {
 					fill: {
 						x: 0.5,
 						y: 0.5,
-						xScale: 1,
+						xScale: 0.7,
 						yScale: 1,
 					},
 				},
+
+				$references: {
+					'mixer.fill.xScale': {
+						// Local path to overwrite
+						datastoreKey: 'scale', // Reference key in datastore
+						overwrite: false,
+					},
+					'mixer.fill.yScale': {
+						// Local path to overwrite
+						datastoreKey: 'scale', // Reference key in datastore
+						overwrite: false,
+					},
+				},
 			},
+			/*
 			keyframes: [
 				{
 					id: 'kf0',
@@ -61,6 +75,7 @@ export const input: TSRInput = {
 					},
 				},
 			],
+			*/
 		}),
 	],
 }

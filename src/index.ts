@@ -3,7 +3,7 @@ import * as chokidar from 'chokidar'
 import * as fs from 'fs'
 import * as _ from 'underscore'
 import * as path from 'path'
-import { Mappings, TSRTimeline, DeviceOptionsAny } from 'timeline-state-resolver'
+import { Mappings, TSRTimeline, DeviceOptionsAny, Datastore } from 'timeline-state-resolver'
 import { TSRHandler } from './tsrHandler'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const clone = require('fast-clone')
@@ -19,8 +19,8 @@ watcher
 	.on('add', () => {
 		reloadInput()
 	})
-	.on('change', () => {
-		reloadInput()
+	.on('change', (path: string, stats: fs.Stats) => {
+		reloadInput({ path, stats })
 	})
 	.on('unlink', () => {
 		reloadInput()
@@ -34,16 +34,12 @@ const currentInput: Input = {
 	mappings: {},
 	settings: {},
 	timeline: [],
+	datastore: {},
 }
 let tsr = new TSRHandler()
-function reloadInput() {
-	const newInput: Input = {
-		devices: {},
-		mappings: {},
-		settings: {},
-		timeline: [],
-	}
-	// _.each(fs.readdirSync('input/'), file => {
+function reloadInput(changed?: { path: string; stats: fs.Stats }) {
+	const newInput: Input = clone(currentInput)
+
 	_.each(getAllFilesInDirectory('input/'), (filePath) => {
 		const requirePath = '../' + filePath.replace(/\\/g, '/')
 
@@ -51,29 +47,55 @@ function reloadInput() {
 			// ignore and folders files that begin with "_"
 			return
 		}
+
 		if (filePath.match(/\.ts$/)) {
+			if (changed) {
+				// Only update if the file has updated:
+				if (changed.path !== filePath) {
+					return
+				}
+			}
+
 			delete require.cache[require.resolve(requirePath)]
 
 			try {
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				const fileContents = require(requirePath)
 
-				const fileInput = fileContents.input || {}
+				const fileInput: TSRInput = fileContents.input || {}
 
-				_.each(fileInput.devices, (device: any, deviceId) => {
-					newInput.devices[deviceId] = device
-				})
-				_.each(fileInput.mappings, (mapping: any, mappingId) => {
-					newInput.mappings[mappingId] = mapping
-				})
-				_.each(fileInput.settings, (setting: any, settingId) => {
-					// @ts-expect-error generic module applying
-					newInput.settings[settingId] = setting
-				})
+				if (fileInput.devices) {
+					newInput.devices = {}
+					_.each(fileInput.devices, (device: any, deviceId) => {
+						newInput.devices[deviceId] = device
+					})
+				}
+				if (fileInput.mappings) {
+					newInput.mappings = {}
+					_.each(fileInput.mappings, (mapping: any, mappingId) => {
+						newInput.mappings[mappingId] = mapping
+					})
+				}
+				if (fileInput.settings) {
+					newInput.settings = {}
+					_.each(fileInput.settings, (setting: any, settingId) => {
+						// @ts-expect-error generic module applying
+						newInput.settings[settingId] = setting
+					})
+				}
 
-				_.each(fileInput.timeline, (obj: any) => {
-					newInput.timeline.push(obj)
-				})
+				if (fileInput.timeline) {
+					newInput.timeline = []
+					_.each(fileInput.timeline, (obj: any) => {
+						newInput.timeline.push(obj)
+					})
+				}
+				if (fileInput.datastore) {
+					newInput.datastore = {}
+					_.each(fileInput.datastore, (datastoreValue: any, datastoreKey) => {
+						newInput.datastore[datastoreKey] = datastoreValue
+					})
+				}
 			} catch (e) {
 				console.error(`Failed to load file: ${requirePath}`, e)
 			}
@@ -120,6 +142,14 @@ function reloadInput() {
 
 				tsr.setTimelineAndMappings(newInput.timeline, newInput.mappings)
 			}
+			if (!_.isEqual(newInput.datastore, currentInput.datastore)) {
+				console.log('')
+				console.log('')
+				console.log('************************ Datastore changed ******************')
+				currentInput.datastore = clone(newInput.datastore)
+
+				tsr.setDatastore(newInput.datastore)
+			}
 		})
 		.catch(console.error)
 }
@@ -151,6 +181,7 @@ export interface Input {
 	}
 	mappings: Mappings
 	timeline: TSRTimeline
+	datastore: Datastore
 }
 export interface TSRSettings {
 	multiThreading?: boolean
