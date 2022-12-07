@@ -1,4 +1,4 @@
-## :stop_sign::stop_sign: This tool has been relocated to be part of the main [TSR](https://github.com/nrkno/tv-automation-state-timeline-resolver) repository. :stop_sign::stop_sign:
+## :stop_sign::stop_sign: This tool has been relocated to be part of the [TSR](https://github.com/nrkno/tv-automation-state-timeline-resolver) project. :stop_sign::stop_sign:
 
 
 # Quick-TSR
